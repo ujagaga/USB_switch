@@ -1,0 +1,24 @@
+/* This is an example of config.h
+ * Please make a copy of this file and rename it to config.h
+*/
+#ifndef CONFIG_H_
+#define CONFIG_H_
+
+#define USB1_PWR_PIN        (0)
+#define USB1_DATA_PIN       (2)
+#define USB2_PWR_PIN        (4)
+#define USB2_DATA_PIN       (5)
+
+#define SSID_1                      "My primary WiFi SSID"
+#define PASS_1                      "wifi_pass"
+
+#define SSID_2                      "Optional alternate WiFi SSID"
+#define PASS_2                      "WiFi2_pass"
+
+#define UDP_PORT                    (60010)
+
+// For OTA update
+#define DEVICE_NAME                 "ESP_USB_SW"
+
+
+#endif
