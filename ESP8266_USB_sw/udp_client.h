@@ -4,5 +4,6 @@
 extern void UDPC_init(void);
 extern void UDPC_process(void);
 extern int UDPC_getPort(void);
+extern void UDPC_togglePort(void);
 
 #endif

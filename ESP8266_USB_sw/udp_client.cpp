@@ -12,6 +12,14 @@ void UDPC_init(){
   Udp.begin(UDP_PORT);
 }
 
+void UDPC_togglePort(){
+  if(port == 1){
+    port = 0;
+  }else{
+    port = 1;
+  }   
+}
+
 void UDPC_process(){
   int packetSize = Udp.parsePacket();
   
@@ -30,11 +38,17 @@ void UDPC_process(){
     
       int rx = msg.toInt();
 
-      if((rx > 199) && (rx < 202)){
+      if((rx > 199) && (rx < 203)){
         if(rx == 200){
           port = 0;
-        }else{
+        }else if(rx == 201){
           port = 1;
+        }else{
+          if(port == 1){
+            port = 0;
+          }else{
+            port = 1;
+          }          
         }
       }    
     }

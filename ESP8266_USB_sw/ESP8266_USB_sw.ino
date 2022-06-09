@@ -5,12 +5,15 @@
 #include "config.h"
 #include "ota.h"
 
-#define STATE_TIME  (100)
+#define STATE_TIME      (100)
+#define DEBOUNCE_TIME   (500)
 
 ESP8266WiFiMulti WiFiMulti;
 uint32_t switching_time = 0;
 static int port = 1;
 static int next_port = 0;
+volatile int tgl_btn_state = 1;
+static uint32_t btnChangeTimestamp = 0;
 
 void check_port(){  
 
@@ -59,6 +62,19 @@ void check_port(){
   }
 }
 
+void check_button_press(){
+  int btn_state = digitalRead(TGL_BTN_PIN);
+    
+  if((tgl_btn_state != btn_state) && (btn_state == 0)){
+    if((millis() - btnChangeTimestamp) > DEBOUNCE_TIME){
+      UDPC_togglePort();
+      btnChangeTimestamp = millis();
+    }
+  }
+  
+  tgl_btn_state = btn_state;
+}
+
 void setup()
 {
   pinMode(USB1_PWR_PIN, OUTPUT);
@@ -69,8 +85,9 @@ void setup()
   digitalWrite(USB2_PWR_PIN, LOW);
   pinMode(USB2_DATA_PIN, OUTPUT);
   digitalWrite(USB2_DATA_PIN, LOW);
-    
-  Serial.begin(115200);
+  pinMode(TGL_BTN_PIN, INPUT_PULLUP);
+      
+  Serial.begin(115200, SERIAL_8N1, SERIAL_TX_ONLY);
    
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(SSID_1, PASS_1);
@@ -96,5 +113,6 @@ void loop() {
   }else{
     UDPC_process();
     check_port();
+    check_button_press();
   }
 }
